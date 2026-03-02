@@ -29,7 +29,8 @@ repository = "https://github.com/garzondiegofeup/nomad-oasis-inl"
 [project.optional-dependencies]
 # Add your plugins to the list below.
 plugins = [
- "nomad-north-jupyter>=0.2.1"
+ "nomad-north-jupyter>=0.2.1",
+ "nomad-material-processing>=1.0.0", 
   ]
 jupyter = ["jupyter-events"]
 gpu-action = []
