@@ -2223,6 +2223,7 @@ jupyter = [
     { name = "jupyter-events" },
 ]
 plugins = [
+    { name = "nomad-material-processing" },
     { name = "nomad-north-jupyter" },
 ]
 
@@ -2231,6 +2232,7 @@ requires-dist = [
     { name = "jupyter-events", marker = "extra == 'jupyter'" },
     { name = "nomad-lab", extras = ["dev", "infrastructure"], marker = "extra == 'dev'" },
     { name = "nomad-lab", extras = ["infrastructure"], specifier = ">=1.4.1" },
+    { name = "nomad-material-processing", marker = "extra == 'plugins'", specifier = ">=1.0.0" },
     { name = "nomad-north-jupyter", marker = "extra == 'plugins'", specifier = ">=0.2.1" },
 ]
 provides-extras = ["plugins", "jupyter", "gpu-action", "cpu-action", "dev"]
@@ -2322,6 +2324,18 @@ infrastructure = [
     { name = "uvicorn", extra = ["standard"] },
     { name = "validators" },
     { name = "zipstream-ng" },
+]
+
+[[package]]
+name = "nomad-material-processing"
+version = "1.0.5"
+source = { registry = "https://gitlab.mpcdf.mpg.de/api/v4/projects/2187/packages/pypi/simple" }
+dependencies = [
+    { name = "nomad-lab" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/52/41/8bfa81114664fc04a504039d98b2b4fb633bd7bb264605b3bce14286fa60/nomad_material_processing-1.0.5.tar.gz", hash = "sha256:4820d200c768239d9d2503a9d8b4aa8b4eb31e0b0a2b5bd881aa62484b5beb1c", size = 586113, upload-time = "2025-01-30T10:15:52.564Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/25/10/6a7f8e83098dc88c608e1974524dcaf8339ad95d44e27804e343f8c99b12/nomad_material_processing-1.0.5-py3-none-any.whl", hash = "sha256:7091a2a8c26054fb64d1fa222ae6e6ba525acb3d2af974d22573d0a35bfd42a7", size = 54698, upload-time = "2025-01-30T10:15:50.576Z" },
 ]
 
 [[package]]
