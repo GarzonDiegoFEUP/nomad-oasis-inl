@@ -93,6 +93,7 @@ jobs:
       - name: Run plugin tests
         env:
           PLUGIN_TESTS_CI_NODE_INDEX: ${{ matrix.group }}
+          NOMAD_CONFIG: ${{ github.workspace }}/configs/nomad.yaml
         run: |
           # replace the yaml list with a string, use a `,` to separate the plugins
           PLUGINS_STRING=$(echo "$PLUGIN_TESTS_PLUGINS_TO_SKIP" | tr '\n' ',' | sed 's/,$//')
