@@ -2611,7 +2611,6 @@ jupyter = [
 ]
 plugins = [
     { name = "nomad-baseclasses" },
-    { name = "nomad-inl-base" },
     { name = "nomad-material-processing" },
     { name = "nomad-measurements" },
     { name = "nomad-north-jupyter" },
@@ -2621,7 +2620,6 @@ plugins = [
 requires-dist = [
     { name = "jupyter-events", marker = "extra == 'jupyter'" },
     { name = "nomad-baseclasses", marker = "extra == 'plugins'", git = "https://github.com/nomad-hzb/nomad-baseclasses.git" },
-    { name = "nomad-inl-base", marker = "extra == 'plugins'", git = "https://github.com/GarzonDiegoFEUP/nomad-inl-base.git" },
     { name = "nomad-lab", extras = ["dev", "infrastructure"], marker = "extra == 'dev'" },
     { name = "nomad-lab", extras = ["infrastructure"], specifier = ">=1.4.1" },
     { name = "nomad-material-processing", marker = "extra == 'plugins'", specifier = ">=1.0.0" },
@@ -2629,17 +2627,6 @@ requires-dist = [
     { name = "nomad-north-jupyter", marker = "extra == 'plugins'", specifier = ">=0.2.1" },
 ]
 provides-extras = ["plugins", "jupyter", "gpu-action", "cpu-action", "dev"]
-
-[[package]]
-name = "nomad-inl-base"
-version = "0.1.0"
-source = { git = "https://github.com/GarzonDiegoFEUP/nomad-inl-base.git#400eefda1a65a46152c34a509f7d7068ada2c3a8" }
-dependencies = [
-    { name = "nomad-baseclasses" },
-    { name = "nomad-lab" },
-    { name = "nomad-material-processing" },
-    { name = "python-magic-bin", marker = "sys_platform == 'win32'" },
-]
 
 [[package]]
 name = "nomad-lab"
