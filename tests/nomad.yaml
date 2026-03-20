@@ -7,3 +7,9 @@ client:
   password: "password"
 services:
   upload_limit: 1000
+
+plugins:
+  entry_points:
+    options:
+      nomad_north_jupyter.north_tools:jupyter:
+        id_url_safe: north-jupyter
