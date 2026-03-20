@@ -12,6 +12,9 @@ oasis:
     - "diogo.costa@inl.int"
     - "jose.fonseca@inl.int"
     - "nuno.rodrigues@inl.int"
+    - "margarida.moura@inl.int"
+    - "marina.alves@inl.int"
+    - "joana.m.ribeiro@inl.int"
 
 plugins:
   entry_points:
