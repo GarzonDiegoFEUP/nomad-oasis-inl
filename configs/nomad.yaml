@@ -5,6 +5,13 @@ services:
 oasis:
   is_oasis: true
   uses_central_user_management: true
+  allowed_users:
+    - "diego.garzon@inl.int"
+    - "sascha.sadewasser@inl.int"
+    - "pedro.anacleto@inl.int"
+    - "diogo.costa@inl.int"
+    - "jose.fonseca@inl.int"
+    - "nuno.rodrigues@inl.int"
 
 plugins:
   entry_points:

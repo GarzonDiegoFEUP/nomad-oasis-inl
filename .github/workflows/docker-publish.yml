@@ -16,6 +16,7 @@ env:
   UV_VERSION: 0.9
   PYTHON_VERSION: 3.12
   JUPYTER_VERSION: "2025-04-14"
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
   # If you want to include custom documentation, create a fork of the repo below and link the forked repo here
   NOMAD_DOCS_REPO: https://github.com/FAIRmat-NFDI/nomad-docs.git
   NOMAD_DOCS_REPO_REF: "main"
