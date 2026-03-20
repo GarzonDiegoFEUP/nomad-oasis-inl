@@ -33,6 +33,7 @@ plugins = [
  "nomad-material-processing>=1.0.0", 
  "nomad-baseclasses @ git+https://github.com/nomad-hzb/nomad-baseclasses.git",
  "nomad-measurements>=1.3.0",
+ "nomad-inl-base @ git+https://github.com/GarzonDiegoFEUP/nomad-inl-base.git",
   ]
 jupyter = ["jupyter-events"]
 gpu-action = []
