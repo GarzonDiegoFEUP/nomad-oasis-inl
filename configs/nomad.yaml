@@ -1,5 +1,5 @@
 services:
-  api_host: "localhost"
+  api_host: "nomad-sadewasser.inl.local"
   api_base_path: "/nomad-oasis"
 
 oasis:
@@ -15,7 +15,7 @@ plugins:
 
 meta:
   deployment: "oasis"
-  deployment_url: "https://my-oasis.org/api"
+  deployment_url: "https://nomad-sadewasser.inl.local/nomad-oasis/api"
   maintainer_email: "me@my-oasis.org"
 
 logstash:
