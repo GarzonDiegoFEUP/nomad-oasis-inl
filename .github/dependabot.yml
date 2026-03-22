@@ -11,6 +11,10 @@ updates:
       interval: "weekly"
     allow:
       - dependency-type: all
+    groups:
+      python-deps:
+        patterns:
+          - "*"
 
   # Enable version updates for Docker
   - package-ecosystem: "docker"
@@ -19,10 +23,18 @@ updates:
     # Check for updates once a week
     schedule:
       interval: "weekly"
+    groups:
+      docker-deps:
+        patterns:
+          - "*"
 
   # Update action versions
   - package-ecosystem: "github-actions"
     directory: "/"
     schedule:
-      interval: "weekly" 
+      interval: "weekly"
+    groups:
+      github-actions:
+        patterns:
+          - "*"
 
