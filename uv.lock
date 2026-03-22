@@ -16,13 +16,7 @@ resolution-markers = [
 prerelease-mode = "explicit"
 
 [manifest]
-constraints = [
-    { name = "chardet", specifier = ">=3.0.2,<6" },
-    { name = "charset-normalizer", specifier = ">=2,<4" },
-    { name = "flatdict", specifier = ">=4.1.0" },
-    { name = "requests", specifier = ">=2.31.0" },
-    { name = "urllib3", specifier = ">=1.21.1,<3" },
-]
+constraints = [{ name = "flatdict", specifier = ">=4.1.0" }]
 
 [[package]]
 name = "aiofiles"
