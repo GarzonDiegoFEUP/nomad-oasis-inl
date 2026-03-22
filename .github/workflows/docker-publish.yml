@@ -215,26 +215,6 @@ jobs:
             done
           '
 
-          echo "Starting background diagnostics monitor..."
-          (
-            sleep 30
-            while docker inspect app &>/dev/null; do
-              echo "--- $(date -u) app process tree ---"
-              docker exec app ps auxf 2>/dev/null || true
-              echo "--- $(date -u) app open connections ---"
-              docker exec app cat /proc/1/net/tcp 2>/dev/null | head -20 || true
-              echo "--- $(date -u) app Python threads ---"
-              docker exec app python3 -c "
-          import threading, traceback, sys
-          for t in threading.enumerate():
-              print(f'Thread: {t.name}')
-              traceback.print_stack(sys._current_frames().get(t.ident), file=sys.stdout)
-          " 2>/dev/null || true
-              sleep 30
-            done
-          ) &
-          MONITOR_PID=$!
-
           echo "Waiting for app and jupyter to be healthy (up to 10 min)..."
           HEALTHY=true
           if ! timeout 620 bash -c '
@@ -258,8 +238,6 @@ jobs:
               HEALTHY=false
             fi
           fi
-
-          kill $MONITOR_PID 2>/dev/null || true
 
           if [ "$HEALTHY" != "true" ]; then
             echo "Containers failed health check."

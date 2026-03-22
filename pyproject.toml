@@ -51,6 +51,11 @@ constraint-dependencies = [
   # nomad-baseclasses requires chardet>=5.1, but chardet 5.x causes appworker
   # to hang silently at startup. chardet 7.x is required for the app to start.
   "chardet>=7",
+  # optimade>=1.4.0 added get_logger() to optimade.server.logger, but
+  # nomad patches that module with nomad.app.optimade_logger which only
+  # exports LOGGER. This causes an ImportError at startup. Pin below 1.4.0
+  # until nomad-lab is updated to be compatible.
+  "optimade<1.4.0",
 ]
 
 [tool.setuptools.packages.find]
