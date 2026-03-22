@@ -46,17 +46,7 @@ extra-index-url = [
   "https://gitlab.mpcdf.mpg.de/api/v4/projects/2187/packages/pypi/simple",
 ]
 prerelease = "explicit"
-constraint-dependencies = [
-  "flatdict>=4.1.0",
-  # Pin requests and its dependencies to mutually compatible versions.
-  # requests declares chardet<6, charset-normalizer<4, and urllib3<3 as supported;
-  # without these caps uv resolves chardet 7.x / urllib3 2.6+ which triggers
-  # RequestsDependencyWarning and can crash the nomad app at startup.
-  "requests>=2.31.0",
-  "urllib3>=1.21.1,<3",
-  "charset-normalizer>=2,<4",
-  "chardet>=3.0.2,<6",
-]
+constraint-dependencies = ["flatdict>=4.1.0"]
 
 [tool.setuptools.packages.find]
 exclude = ["gui*", "docs*", "config*"]
