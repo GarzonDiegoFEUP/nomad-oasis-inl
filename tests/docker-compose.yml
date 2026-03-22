@@ -153,7 +153,7 @@ services:
         - "curl"
         - "--fail"
         - "--silent"
-        - "http://localhost:8000/-/health"
+        - "http://localhost:8000/nomad-oasis/-/health"
       interval: 10s
       timeout: 10s
       retries: 60

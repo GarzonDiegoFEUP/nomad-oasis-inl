@@ -1,20 +1,12 @@
 keycloak:
   server_url: "http://keycloak:8080/"
   realm_name: "fairdi_nomad_test"
-
-logstash:
-  enabled: false
-
-temporal:
-  enabled: false
-
-services:
-  api_base_path: "/nomad-oasis"
-  upload_limit: 1000
 client:
   url: "http://localhost:8000/nomad-oasis/api"
   user: "test"
   password: "password"
+services:
+  upload_limit: 1000
 
 plugins:
   entry_points:
