@@ -132,6 +132,7 @@ services:
       NOMAD_ELASTIC_HOST: elastic
       NOMAD_MONGO_HOST: mongo
       NOMAD_TEMPORAL_HOST: temporal
+      PYTHONASYNCIODEBUG: "1"
     depends_on:
       rabbitmq:
         condition: service_healthy
