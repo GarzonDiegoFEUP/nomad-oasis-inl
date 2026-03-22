@@ -241,6 +241,15 @@ jobs:
 
           if [ "$HEALTHY" != "true" ]; then
             echo "Containers failed health check."
+            echo "=== App PID 1 threads and kernel wait channels ==="
+            docker exec app sh -c '
+              for tid in $(ls /proc/1/task/ 2>/dev/null); do
+                wchan=$(cat /proc/1/task/$tid/wchan 2>/dev/null || echo N/A)
+                echo "  TID $tid: $wchan"
+              done
+            ' || true
+            echo "=== App process list ==="
+            docker exec app ps auxf || true
             echo "=== Logs for app ==="
             docker logs app
             echo "=== Logs for jupyter ==="
