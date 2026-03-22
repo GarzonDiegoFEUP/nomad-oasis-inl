@@ -132,7 +132,6 @@ services:
       NOMAD_ELASTIC_HOST: elastic
       NOMAD_MONGO_HOST: mongo
       NOMAD_TEMPORAL_HOST: temporal
-      NOMAD_LOGSTASH_HOST: logtransfer
     depends_on:
       rabbitmq:
         condition: service_healthy
@@ -165,12 +164,6 @@ services:
     image: ${JUPYTER_IMAGE:-ghcr.io/fairmat-nfdi/nomad-distro-template/jupyter:main}
     platform: linux/amd64
     container_name: jupyter
-    environment:
-      NOMAD_SERVICES_API_HOST: app
-      NOMAD_SERVICES_API_PORT: 8000
-    depends_on:
-      app:
-        condition: service_healthy
     ports:
       - 8888:8888
     healthcheck:

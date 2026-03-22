@@ -1,6 +1,12 @@
 keycloak:
   server_url: "http://keycloak:8080/"
   realm_name: "fairdi_nomad_test"
+
+logstash:
+  enabled: false
+
+temporal:
+  enabled: true
 client:
   url: "http://localhost:8000/nomad-oasis/api"
   user: "test"
