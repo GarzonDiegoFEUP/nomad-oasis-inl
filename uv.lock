@@ -1,5 +1,5 @@
 version = 1
-revision = 2
+revision = 3
 requires-python = ">=3.10"
 resolution-markers = [
     "python_full_version >= '3.14' and sys_platform == 'win32'",
@@ -2920,7 +2920,7 @@ provides-extras = ["plugins", "jupyter", "gpu-action", "cpu-action", "dev"]
 [[package]]
 name = "nomad-inl-base"
 version = "0.1.0"
-source = { git = "https://github.com/GarzonDiegoFEUP/nomad-inl-base.git#4ad06174771eebee1d81214b639d9efdf27aa709" }
+source = { git = "https://github.com/GarzonDiegoFEUP/nomad-inl-base.git#bb68aa879c7f29ab46d3f9c8dfb9b46cf8134acf" }
 dependencies = [
     { name = "nomad-baseclasses" },
     { name = "nomad-lab" },
