@@ -5,6 +5,8 @@ services:
 oasis:
   is_oasis: true
   uses_central_user_management: true
+  admin_users:
+    - "diego.garzon@inl.int"
   allowed_users:
     - "diego.garzon@inl.int"
     - "sascha.sadewasser@inl.int"
@@ -20,7 +22,7 @@ oasis:
     - "gabriel.quartin@inl.int"
     - "pedro.sousa@inl.int"
     - "neha.kumari@inl.int"
-    
+
 
 plugins:
   entry_points:
