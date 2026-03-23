@@ -15,6 +15,12 @@ oasis:
     - "margarida.moura@inl.int"
     - "marina.alves@inl.int"
     - "joana.m.ribeiro@inl.int"
+    - "andre.silva@inl.int"
+    - "joao.p.oliveira@inl.int"
+    - "gabriel.quartin@inl.int"
+    - "pedro.sousa@inl.int"
+    - "neha.kumari@inl.int"
+    
 
 plugins:
   entry_points:
