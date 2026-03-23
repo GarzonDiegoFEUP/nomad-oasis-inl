@@ -1,12 +1,11 @@
 services:
   api_host: "nomad-sadewasser.inl.local"
   api_base_path: "/nomad-oasis"
+  admin_user_id: "2a497944-a042-45d1-9ec5-cd450c3d8950"
 
 oasis:
   is_oasis: true
   uses_central_user_management: true
-  admin_users:
-    - "diego.garzon@inl.int"
   allowed_users:
     - "diego.garzon@inl.int"
     - "sascha.sadewasser@inl.int"
