@@ -60,6 +60,12 @@ constraint-dependencies = [
   # ValueError when the free-var counts don't match. Pin to <3.0.0 until
   # nomad fixes the monkey-patch to use functools.wraps or direct assignment.
   "h5grove<3.0.0",
+  # starlette 1.0.0 (2026-03-22) removed on_startup/on_shutdown attributes from
+  # starlette.routing.Router. optimade 1.2.x uses a bare Router (not APIRouter)
+  # in optimade.server.routers.landing, and fastapi's include_router() still
+  # accesses router.on_startup, raising AttributeError on startup. Pin to
+  # <1.0.0 until optimade or fastapi fixes the incompatibility.
+  "starlette<1.0.0",
 ]
 
 [tool.setuptools.packages.find]
