@@ -23,6 +23,8 @@ oasis:
     - "neha.kumari@inl.int"
     - "eduardo.lopez@inl.int"
 
+uploads:
+  unpublished_limit: 100
 
 plugins:
   entry_points:
