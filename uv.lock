@@ -3036,7 +3036,7 @@ provides-extras = ["plugins", "jupyter", "gpu-action", "cpu-action", "dev"]
 [[package]]
 name = "nomad-inl-base"
 version = "0.1.0"
-source = { git = "https://github.com/GarzonDiegoFEUP/nomad-inl-base.git#1c06150435a905f55fc9d37aaa4b97ff0ff0ba06" }
+source = { git = "https://github.com/GarzonDiegoFEUP/nomad-inl-base.git#5188bb7d4a6075ae156b9450bb57857a8e45496f" }
 dependencies = [
     { name = "nomad-analysis" },
     { name = "nomad-baseclasses" },
