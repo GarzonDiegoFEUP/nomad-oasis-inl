@@ -286,6 +286,8 @@ services:
       - ./.volumes/fs:/app/.volumes/fs
       - /var/run/docker.sock:/var/run/docker.sock
     user: "1000:999"
+    group_add:
+      - "984"
     command: python -m nomad.cli admin run hub
     healthcheck:
       test:

@@ -134,8 +134,12 @@ ARG PYTHON_VERSION=3.12
 
 COPY --chown=nomad:${UID} --from=builder /opt/venv /opt/venv
 COPY configs/nomad.yaml nomad.yaml
+COPY scripts/patch_nomad_north_start_tool.py /tmp/patch_nomad_north_start_tool.py
 COPY pyproject.toml uv.lock /opt/
 COPY --chown=nomad:${UID} --from=docs /app/built_docs /opt/venv/lib/python${PYTHON_VERSION}/site-packages/nomad/app/static/docs
+
+RUN python /tmp/patch_nomad_north_start_tool.py \
+ && rm -f /tmp/patch_nomad_north_start_tool.py
 
 RUN mkdir -p /app/.volumes/fs \
  && chown -R nomad:${UID} /app \
