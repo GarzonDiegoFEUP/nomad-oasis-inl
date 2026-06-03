@@ -209,6 +209,8 @@ FROM quay.io/jupyter/base-notebook:${JUPYTER_VERSION} AS jupyter
 # Fix: https://github.com/koalaman/shellcheck/wiki/SC3014
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 
+ENV NOMAD_CONFIG=/opt/nomad/nomad.yaml
+
 USER root
 
 RUN apt-get update \
@@ -234,6 +236,7 @@ WORKDIR "${HOME}"
 
 COPY --from=uv_image /uv /bin/uv
 COPY --from=jupyter_builder /opt/conda /opt/conda
+COPY configs/nomad.yaml /opt/nomad/nomad.yaml
 
 
 # Get rid ot the following message when you open a terminal in jupyterlab:
