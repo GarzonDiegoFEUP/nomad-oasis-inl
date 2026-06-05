@@ -279,15 +279,21 @@ services:
       NOMAD_RABBITMQ_HOST: rabbitmq
       NOMAD_ELASTIC_HOST: elastic
       NOMAD_MONGO_HOST: mongo
+      # Internal Docker service URL passed to spawned Jupyter containers so they
+      # can reach the API without resolving the external hostname inside Docker.
+      NOMAD_NORTH_INTERNAL_CLIENT_URL: "http://app:8000/nomad-oasis/api/v1"
     env_file:
       - ./.env
     volumes:
       - ./configs/nomad.yaml:/app/nomad.yaml
       - ./.volumes/fs:/app/.volumes/fs
       - /var/run/docker.sock:/var/run/docker.sock
+      - ./nomad/jupyterhub_config.py:/app/nomad/jupyterhub_config.py:ro
     user: "1000:999"
     group_add:
       - "984"
+    extra_hosts:
+      - "nomad-sadewasser.inl.local:host-gateway"
     command: python -m nomad.cli admin run hub
     healthcheck:
       test:
