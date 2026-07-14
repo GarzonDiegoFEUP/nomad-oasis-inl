@@ -7,23 +7,34 @@ services:
 oasis:
   is_oasis: true
   uses_central_user_management: true
+  # NOTE: authentication is delegated to the central FAIRDI/NOMAD Keycloak
+  # (fairdi_nomad_prod @ nomad-lab.eu). We do not control that realm, and some
+  # users' central accounts have no verified email set, so their token's
+  # `email` claim is null. Since `username` is always populated, we list both
+  # email and username for each person below as a safeguard until/unless they
+  # verify their email on their central nomad-lab.eu account.
   allowed_users:
     - "diego.garzon@inl.int"
-    - "garzondiegoinl" # username fallback: local user record has email=None
+    - "garzondiegoinl" # email=None on central account
     - "sascha.sadewasser@inl.int"
     - "pedro.anacleto@inl.int"
     - "diogo.costa@inl.int"
     - "jose.fonseca@inl.int"
+    - "josefonseca" # email=None on central account
     - "nuno.rodrigues@inl.int"
     - "margarida.moura@inl.int"
+    - "margaridamoura" # email=None on central account
     - "marina.alves@inl.int"
     - "joana.m.ribeiro@inl.int"
+    - "joanar" # email=None on central account
     - "andre.silva@inl.int"
     - "joao.p.oliveira@inl.int"
+    - "joao_oliveira" # email=None on central account
     - "gabriel.quartin@inl.int"
     - "pedro.sousa@inl.int"
     - "neha.kumari@inl.int"
     - "eduardo.lopez@inl.int"
+    - "eduardo" # email=None on central account
     - "ines.cardoso@inl.int"
 
 plugins:
