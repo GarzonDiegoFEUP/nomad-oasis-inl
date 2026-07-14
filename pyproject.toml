@@ -73,6 +73,7 @@ constraint-dependencies = [
   # accesses router.on_startup, raising AttributeError on startup. Pin to
   # <1.0.0 until optimade or fastapi fixes the incompatibility.
   "starlette<1.0.0",
+  "fastapi<1.0.0",
 ]
 
 [tool.setuptools.packages.find]

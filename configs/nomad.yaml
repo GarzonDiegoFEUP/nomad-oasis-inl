@@ -23,6 +23,7 @@ oasis:
     - "pedro.sousa@inl.int"
     - "neha.kumari@inl.int"
     - "eduardo.lopez@inl.int"
+    - "ines.cardoso@inl.int"
 
 plugins:
   entry_points:
