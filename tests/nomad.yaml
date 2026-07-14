@@ -13,3 +13,10 @@ plugins:
     options:
       nomad_north_jupyter.north_tools:jupyter:
         id_url_safe: north-jupyter
+        north_tool:
+          display_name: INL Jupyter
+
+north:
+  tools:
+    exclude:
+      - jupyter

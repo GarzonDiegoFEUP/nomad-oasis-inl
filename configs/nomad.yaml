@@ -9,6 +9,7 @@ oasis:
   uses_central_user_management: true
   allowed_users:
     - "diego.garzon@inl.int"
+    - "garzondiegoinl" # username fallback: local user record has email=None
     - "sascha.sadewasser@inl.int"
     - "pedro.anacleto@inl.int"
     - "diogo.costa@inl.int"
@@ -32,6 +33,17 @@ plugins:
         id_url_safe: north-jupyter
         north_tool:
           image: ghcr.io/garzondiegofeup/nomad-oasis-inl/jupyter:main
+          display_name: INL Jupyter
+          short_description: INL Jupyter Notebook server (with INL plugins pre-installed).
+
+north:
+  tools:
+    # Hide the built-in default "Jupyter Notebook" tool (id: jupyter). It uses
+    # the stock upstream image, which does NOT have our plugins (nomad-analysis,
+    # nomad-inl-base, etc.) installed, and its display name is easily confused
+    # with our custom "INL Jupyter" tool above. Use "INL Jupyter" instead.
+    exclude:
+      - jupyter
 
 meta:
   deployment: "oasis"

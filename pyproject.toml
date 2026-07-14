@@ -41,6 +41,8 @@ jupyter = [
   "pandas",
   "matplotlib",
   "numpy",
+  "ipywidgets",
+  "netCDF4",
   ]
 gpu-action = []
 cpu-action = []
