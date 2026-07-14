@@ -72,8 +72,8 @@ constraint-dependencies = [
   # in optimade.server.routers.landing, and fastapi's include_router() still
   # accesses router.on_startup, raising AttributeError on startup. Pin to
   # <1.0.0 until optimade or fastapi fixes the incompatibility.
-  "fastapi==0.115.0",
-  "starlette==0.38.6",
+  "fastapi<=1.0.0",
+  "starlette<=1.0.0",
   "uvicorn[standard]==0.30.6",
 ]
 
