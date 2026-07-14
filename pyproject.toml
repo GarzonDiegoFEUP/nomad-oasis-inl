@@ -70,9 +70,18 @@ constraint-dependencies = [
   # starlette 1.0.0 (2026-03-22) removed on_startup/on_shutdown attributes from
   # starlette.routing.Router. optimade 1.2.x uses a bare Router (not APIRouter)
   # in optimade.server.routers.landing, and fastapi's include_router() still
-  # accesses router.on_startup, raising AttributeError on startup. Pin to
-  # <1.0.0 until optimade or fastapi fixes the incompatibility.
-  "fastapi<=1.0.0",
+  # accesses router.on_startup, raising AttributeError on startup.
+  # Separately, fastapi 0.137.0 (2026-06-14, PR #15745) refactored
+  # include_router() to preserve APIRouter/APIRoute instances instead of
+  # cloning routes; it now asserts `not router._contains_router(self)`,
+  # a private APIRouter-only method. optimade's bare Router has no
+  # `_contains_router`, so ANY fastapi >=0.137.0 (including versions <1.0.0,
+  # e.g. 0.139.0) crashes on startup with
+  # AttributeError: 'Router' object has no attribute '_contains_router'.
+  # Pin fastapi below the 0.137.0 refactor (not just <1.0.0) until optimade's
+  # landing.py switches to APIRouter or fastapi restores compatibility with
+  # bare Starlette routers.
+  "fastapi<0.137.0",
   "starlette<=1.0.0",
   "uvicorn[standard]==0.30.6",
 ]
