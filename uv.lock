@@ -3832,7 +3832,7 @@ provides-extras = ["plugins", "jupyter", "gpu-action", "cpu-action", "dev"]
 [[package]]
 name = "nomad-inl-base"
 version = "0.1.0"
-source = { git = "https://github.com/GarzonDiegoFEUP/nomad-inl-base.git#6e9b04f887d2a94b5556aa9073c4ee612eebcb1e" }
+source = { git = "https://github.com/GarzonDiegoFEUP/nomad-inl-base.git#185a7ee377787bb384b2e6c91f700f3039c659c9" }
 dependencies = [
     { name = "galvani" },
     { name = "lmfit" },
