@@ -254,22 +254,26 @@ RUN cat > /usr/local/bin/fix-ownership.sh << 'EOF' && chmod +x /usr/local/bin/fi
 # Fix ownership of mounted volumes for jovyan user
 # This runs before JupyterLab starts
 
-# Fix common mount paths
-for mount_dir in /home/jovyan/uploads /home/jovyan/user_home /tmp/mounts; do
-    if [ -d "$mount_dir" ]; then
-        echo "Fixing ownership for $mount_dir"
-        chown -R jovyan:jovyan "$mount_dir" 2>/dev/null || true
-        chmod -R u+rw "$mount_dir" 2>/dev/null || true
+set -x  # Enable debug output
+echo "=== Starting ownership fix ==="
+
+# Fix common mount paths recursively
+for mount_dir in /home/jovyan/.volumes/fs /home/jovyan/uploads /home/jovyan/user_home /home/jovyan/work /tmp/mounts; do
+    if [ -e "$mount_dir" ]; then
+        echo "Fixing ownership and permissions for $mount_dir"
+        # Use sudo to ensure we have root privileges
+        sudo chown -R jovyan:jovyan "$mount_dir"
+        sudo chmod -R u+rw "$mount_dir"
+        sudo find "$mount_dir" -type f -name "*.ipynb" -exec chmod u+rw {} \;
     fi
 done
 
-# Also fix any files owned by root in jovyan's home
-if [ -d "/home/jovyan" ]; then
-    find /home/jovyan -type f -user root -exec chown jovyan:jovyan {} \; 2>/dev/null || true
-    find /home/jovyan -type f -name "*.ipynb" -exec chmod u+rw {} \; 2>/dev/null || true
-fi
+# Recursively find and fix all files owned by root in jovyan's home
+echo "Finding and fixing root-owned files in /home/jovyan..."
+sudo find /home/jovyan -type f -user root -exec chown jovyan:jovyan {} \;
+sudo find /home/jovyan -type f -user root -exec chmod u+rw {} \;
 
-echo "Ownership fix complete"
+echo "=== Ownership fix complete ==="
 EOF
 
 # Create wrapper entrypoint that runs ownership fix first
@@ -277,10 +281,12 @@ RUN cat > /usr/local/bin/entrypoint-wrapper.sh << 'EOF' && chmod +x /usr/local/b
 #!/bin/bash
 set -e
 
-# Wrapper entrypoint: fix ownership then start jupyter
+echo "=== Starting entrypoint wrapper ==="
 
-# Run ownership fix as root
-/usr/local/bin/fix-ownership.sh
+# Run ownership fix as root (we're still root in the container)
+sudo /usr/local/bin/fix-ownership.sh
+
+echo "=== Ownership fix done, starting Jupyter ==="
 
 # Execute original entrypoint if it exists, otherwise just run the command
 if [[ -x /docker-entrypoint.sh ]]; then
@@ -290,9 +296,10 @@ else
 fi
 EOF
 
-# Install sudo for ownership fixes (if needed by fix-ownership.sh)
+# Install sudo for ownership fixes
 RUN apt-get update && apt-get install -y --no-install-recommends sudo \
-    && rm -rf /var/lib/apt/lists/*
+    && rm -rf /var/lib/apt/lists/* \
+    && echo "jovyan ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers.d/jovyan
 
 # Set the wrapper as the entrypoint (runs as root, which is fine for fixes)
 ENTRYPOINT ["/usr/local/bin/entrypoint-wrapper.sh"]
