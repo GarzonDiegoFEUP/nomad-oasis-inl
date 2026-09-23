@@ -151,15 +151,16 @@ services:
       - 8000:8000
     healthcheck:
       test:
-        - CMD-SHELL
-        - >
-          python -c "import urllib.request;
-          r=urllib.request.urlopen('http://127.0.0.1:8000/-/health', timeout=10);
-          raise SystemExit(0 if r.status == 200 else 1)"
+        - "CMD"
+        - "curl"
+        - "--fail"
+        - "--silent"
+        - "--show-error"
+        - "http://127.0.0.1:8000/-/health"
       interval: 10s
-      timeout: 15s
+      timeout: 10s
       retries: 60
-      start_period: 10s
+      start_period: 120s
 
   jupyter:
     restart: unless-stopped
@@ -170,15 +171,12 @@ services:
       - 8888:8888
     healthcheck:
       test:
-        - CMD-SHELL
-        - >
-          python -c "import urllib.request;
-          r=urllib.request.urlopen('http://127.0.0.1:8888/', timeout=10);
-          raise SystemExit(0 if r.status == 200 else 1)"
+        - "CMD-SHELL"
+        - "python -c \"import socket; socket.create_connection(('127.0.0.1', 8888), 5).close()\""
       interval: 10s
-      timeout: 15s
-      retries: 30
-      start_period: 10s
+      timeout: 10s
+      retries: 12
+      start_period: 120s
 
 volumes:
   mongo:

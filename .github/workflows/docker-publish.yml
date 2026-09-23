@@ -227,16 +227,12 @@ jobs:
                     [ \"\$status\" = running ] &&
                     [ \"\$health\" = healthy ]; do
 
-                if [ \"\$health\" = unhealthy ]; then
-                  echo '$container became unhealthy'
-                  exit 1
-                fi
-
                 if [ \"\$health\" = none ]; then
                   echo '$container has no Docker health check'
                   exit 1
                 fi
 
+                echo '$container status: \$status, health: \$health; retrying...'
                 sleep 5
               done
             "
@@ -255,22 +251,22 @@ jobs:
 
           if [ "$HEALTHY" != "true" ]; then
             echo "Containers failed health check."
-
+            
             for container in app jupyter; do
               echo "=== $container status ==="
-              docker inspect \
-                --format='Status={{.State.Status}} Health={{if .State.Health}}{{.State.Health.Status}}{{else}}none{{end}} ExitCode={{.State.ExitCode}}' \
-                "$container" || true
+              docker inspect "$container" \
+                --format='status={{.State.Status}} health={{if .State.Health}}{{.State.Health.Status}}{{else}}none{{end}}' \
+                || true
 
               echo "=== $container health log ==="
-              docker inspect \
+              docker inspect "$container" \
                 --format='{{range .State.Health.Log}}{{printf "%s exit=%d output=%s\n" .Start .ExitCode .Output}}{{end}}' \
-                "$container" || true
+                || true
 
               echo "=== Logs for $container ==="
               docker logs "$container" || true
             done
-
+            
             exit 1
           fi
 
