@@ -126,7 +126,58 @@ def pre_spawn(spawner):
             spawner.extra_host_config.update(extra_host_config)
 
 
+def post_spawn(spawner):
+    """Fix file ownership and permissions for mounted volumes after container spawn."""
+    if spawner.handler.current_user.name != 'nomad-service':
+        return
+
+    try:
+        # Fix ownership of files in mounted volumes
+        # This runs inside the container via docker exec
+        spawner.log.info("Fixing file ownership in mounted volumes...")
+
+        user_home = spawner.user_options.get('user_home')
+        if user_home:
+            mount_path = user_home['mount_path']
+            spawner.log.info(f'Fixing ownership for {mount_path}')
+            spawner.container.exec_run(
+                f'chown -R jovyan:jovyan {mount_path}',
+                user='root',
+            )
+            spawner.container.exec_run(
+                f'chmod -R u+rw {mount_path}',
+                user='root',
+            )
+
+        uploads = spawner.user_options.get('uploads', [])
+        for upload in uploads:
+            mount_path = upload['mount_path']
+            spawner.log.info(f'Fixing ownership for {mount_path}')
+            spawner.container.exec_run(
+                f'chown -R jovyan:jovyan {mount_path}',
+                user='root',
+            )
+            # Make all .ipynb files writable
+            spawner.container.exec_run(
+                f'find {mount_path} -name "*.ipynb" -exec chmod u+rw {{}} \\;',
+                user='root',
+            )
+
+        external_mounts = spawner.user_options.get('external_mounts', [])
+        for external_mount in external_mounts:
+            mount_path = external_mount['bind']
+            spawner.log.info(f'Fixing ownership for {mount_path}')
+            spawner.container.exec_run(
+                f'chown -R jovyan:jovyan {mount_path}',
+                user='root',
+            )
+
+    except Exception as e:
+        spawner.log.warning(f'Could not fix file ownership: {e}')
+
+
 c.Spawner.pre_spawn_hook = pre_spawn
+c.Spawner.post_spawn_hook = post_spawn
 
 # configure nomad service
 c.JupyterHub.services.append(

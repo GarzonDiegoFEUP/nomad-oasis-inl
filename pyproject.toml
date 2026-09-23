@@ -33,7 +33,6 @@ plugins = [
  "nomad-material-processing>=1.0.0",
  "nomad-measurements @ git+https://github.com/GarzonDiegoFEUP/nomad-measurements",
  "nomad-inl-base @ git+https://github.com/GarzonDiegoFEUP/nomad-inl-base.git",
- "nomad-gui",
   ]
 jupyter = [
   "jupyter-events",      # Keep it - safer to have it
