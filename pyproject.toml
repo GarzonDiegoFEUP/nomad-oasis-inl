@@ -33,7 +33,7 @@ plugins = [
  "nomad-material-processing>=1.0.0",
  "nomad-measurements @ git+https://github.com/GarzonDiegoFEUP/nomad-measurements",
  "nomad-inl-base @ git+https://github.com/GarzonDiegoFEUP/nomad-inl-base.git",
- "nomad-gui",
+ "nomad-gui==2.0.0b3.dev737+gb6c07140f",
   ]
 jupyter = [
   "jupyter-events",      # Keep it - safer to have it
@@ -54,7 +54,7 @@ dev = ["nomad-lab[infrastructure, dev]"]
 extra-index-url = [
   "https://gitlab.mpcdf.mpg.de/api/v4/projects/2187/packages/pypi/simple",
 ]
-prerelease = "explicit"
+prerelease = "allow"
 constraint-dependencies = [
   "flatdict>=4.1.0",
   # nomad-lab 1.4.1 patches optimade.server.logger with nomad.app.optimade_logger
