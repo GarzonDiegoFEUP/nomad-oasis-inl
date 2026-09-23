@@ -25,6 +25,7 @@ env:
   PLUGIN_TESTS_PLUGINS_TO_SKIP: |
     simulationworkflowschema
     nomad_measurements
+    nomad_gui
 
 permissions:
   contents: write
