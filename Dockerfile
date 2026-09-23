@@ -246,7 +246,7 @@ RUN touch ${HOME}/.hushlogin
 
 # Create entrypoint script to fix ownership of mounted volumes
 USER root
-RUN cat > /usr/local/bin/fix-ownership.sh << 'EOF'
+RUN cat > /usr/local/bin/fix-ownership.sh << 'EOF' && chmod +x /usr/local/bin/fix-ownership.sh
 #!/bin/bash
 # Fix ownership of mounted volumes for jovyan user
 # This runs before JupyterLab starts
@@ -268,10 +268,9 @@ fi
 
 echo "Ownership fix complete"
 EOF
-chmod +x /usr/local/bin/fix-ownership.sh
 
 # Create wrapper entrypoint that runs ownership fix first
-RUN cat > /usr/local/bin/entrypoint-wrapper.sh << 'EOF'
+RUN cat > /usr/local/bin/entrypoint-wrapper.sh << 'EOF' && chmod +x /usr/local/bin/entrypoint-wrapper.sh
 #!/bin/bash
 # Wrapper entrypoint: fix ownership then start jupyter
 
@@ -281,7 +280,6 @@ RUN cat > /usr/local/bin/entrypoint-wrapper.sh << 'EOF'
 # Execute original entrypoint (which handles user switching)
 exec /docker-entrypoint.sh "$@"
 EOF
-chmod +x /usr/local/bin/entrypoint-wrapper.sh
 
 # Install sudo for ownership fixes (if needed by fix-ownership.sh)
 RUN apt-get update && apt-get install -y --no-install-recommends sudo \
