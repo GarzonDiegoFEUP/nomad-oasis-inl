@@ -45,10 +45,16 @@ def pre_spawn(spawner):
         return
 
     # Always mount the shared FS volume so notebooks and uploads are accessible
-    spawner.volumes['/app/.volumes/fs'] = {
-        'mode': 'rw',
-        'bind': '/home/jovyan/.volumes/fs',
-    }
+    # Use the external working directory from environment (passed by docker-compose)
+    import os as _os  # noqa: PLC0415
+    external_fs_dir = _os.environ.get('NOMAD_FS_EXTERNAL_WORKING_DIRECTORY')
+    if external_fs_dir:
+        fs_path = _os.path.join(external_fs_dir, '.volumes/fs')
+        spawner.volumes[fs_path] = {
+            'mode': 'rw',
+            'bind': '/home/jovyan/.volumes/fs',
+        }
+        spawner.log.info(f'Mounting FS volume: {fs_path} → /home/jovyan/.volumes/fs')
 
     user_home = spawner.user_options.get('user_home')
     if user_home:
