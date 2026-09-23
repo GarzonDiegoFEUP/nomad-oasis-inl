@@ -272,13 +272,19 @@ EOF
 # Create wrapper entrypoint that runs ownership fix first
 RUN cat > /usr/local/bin/entrypoint-wrapper.sh << 'EOF' && chmod +x /usr/local/bin/entrypoint-wrapper.sh
 #!/bin/bash
+set -e
+
 # Wrapper entrypoint: fix ownership then start jupyter
 
 # Run ownership fix as root
 /usr/local/bin/fix-ownership.sh
 
-# Execute original entrypoint (which handles user switching)
-exec /docker-entrypoint.sh "$@"
+# Execute original entrypoint if it exists, otherwise just run the command
+if [[ -x /docker-entrypoint.sh ]]; then
+    exec /docker-entrypoint.sh "$@"
+else
+    exec "$@"
+fi
 EOF
 
 # Install sudo for ownership fixes (if needed by fix-ownership.sh)

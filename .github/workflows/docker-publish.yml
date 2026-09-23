@@ -220,22 +220,26 @@ jobs:
           wait_for_healthy() {
             local container="$1"
             local timeout_seconds="$2"
+            local deadline=$((SECONDS + timeout_seconds))
 
-            timeout "$timeout_seconds" bash -c "
-              until status=\$(docker inspect --format='{{.State.Status}}' '$container' 2>/dev/null) &&
-                    health=\$(docker inspect --format='{{if .State.Health}}{{.State.Health.Status}}{{else}}none{{end}}' '$container' 2>/dev/null) &&
-                    [ \"\$status\" = running ] &&
-                    [ \"\$health\" = healthy ]; do
+            while (( SECONDS < deadline )); do
+              status="$(docker inspect --format='{{.State.Status}}' "$container" 2>/dev/null || true)"
+              health="$(docker inspect --format='{{if .State.Health}}{{.State.Health.Status}}{{else}}none{{end}}' "$container" 2>/dev/null || true)"
 
-                if [ \"\$health\" = none ]; then
-                  echo '$container has no Docker health check'
-                  exit 1
-                fi
+              if [[ "$status" == "running" && "$health" == "healthy" ]]; then
+                return 0
+              fi
 
-                echo '$container status: \$status, health: \$health; retrying...'
-                sleep 5
-              done
-            "
+              if [[ "$health" == "none" ]]; then
+                echo "$container has no Docker health check"
+                return 1
+              fi
+
+              echo "$container status: $status, health: $health; retrying..."
+              sleep 5
+            done
+
+            return 1
           }
 
           HEALTHY=true
