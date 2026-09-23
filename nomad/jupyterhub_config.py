@@ -30,8 +30,11 @@ c = get_config()  # type: ignore  # pylint: disable=undefined-variable  # noqa: 
 
 
 def pre_spawn(spawner):
+    spawner.log.info(f'pre_spawn called for user: {spawner.handler.current_user.name}')
+    
     if spawner.handler.current_user.name != 'nomad-service':
         # Do nothing, will only launch the default image with no volumes.
+        spawner.log.info(f'User is not nomad-service ({spawner.handler.current_user.name}), skipping pre_spawn configuration')
 
         # Only the nomad-service can launch specialized tools with mounted volumes
         if spawner.name:
@@ -44,6 +47,8 @@ def pre_spawn(spawner):
 
         return
 
+    spawner.log.info('Configuring pre_spawn for nomad-service')
+    
     # Always mount the shared FS volume so notebooks and uploads are accessible
     # Use the external working directory from environment (passed by docker-compose)
     import os as _os  # noqa: PLC0415
@@ -55,6 +60,8 @@ def pre_spawn(spawner):
             'bind': '/home/jovyan/.volumes/fs',
         }
         spawner.log.info(f'Mounting FS volume: {fs_path} → /home/jovyan/.volumes/fs')
+    else:
+        spawner.log.warning('NOMAD_FS_EXTERNAL_WORKING_DIRECTORY not set')
 
     user_home = spawner.user_options.get('user_home')
     if user_home:
