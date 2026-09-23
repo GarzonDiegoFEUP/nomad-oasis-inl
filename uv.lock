@@ -28,7 +28,7 @@ resolution-markers = [
 ]
 
 [options]
-prerelease-mode = "allow"
+prerelease-mode = "explicit"
 
 [manifest]
 constraints = [

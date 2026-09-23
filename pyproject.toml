@@ -54,7 +54,8 @@ dev = ["nomad-lab[infrastructure, dev]"]
 extra-index-url = [
   "https://gitlab.mpcdf.mpg.de/api/v4/projects/2187/packages/pypi/simple",
 ]
-prerelease = "allow"
+prerelease = "explicit"
+prerelease-package = { nomad-gui = "allow" }
 constraint-dependencies = [
   "flatdict>=4.1.0",
   # nomad-lab 1.4.1 patches optimade.server.logger with nomad.app.optimade_logger
