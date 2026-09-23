@@ -44,6 +44,12 @@ def pre_spawn(spawner):
 
         return
 
+    # Always mount the shared FS volume so notebooks and uploads are accessible
+    spawner.volumes['/app/.volumes/fs'] = {
+        'mode': 'rw',
+        'bind': '/home/jovyan/.volumes/fs',
+    }
+
     user_home = spawner.user_options.get('user_home')
     if user_home:
         spawner.volumes[user_home['host_path']] = {
