@@ -243,3 +243,55 @@ COPY configs/nomad.yaml /opt/nomad/nomad.yaml
 # Get rid ot the following message when you open a terminal in jupyterlab:
 # groups: cannot find name for group ID 11320
 RUN touch ${HOME}/.hushlogin
+
+# Create entrypoint script to fix ownership of mounted volumes
+USER root
+RUN cat > /usr/local/bin/fix-ownership.sh << 'EOF'
+#!/bin/bash
+# Fix ownership of mounted volumes for jovyan user
+# This runs before JupyterLab starts
+
+# Fix common mount paths
+for mount_dir in /home/jovyan/uploads /home/jovyan/user_home /tmp/mounts; do
+    if [ -d "$mount_dir" ]; then
+        echo "Fixing ownership for $mount_dir"
+        chown -R jovyan:jovyan "$mount_dir" 2>/dev/null || true
+        chmod -R u+rw "$mount_dir" 2>/dev/null || true
+    fi
+done
+
+# Also fix any files owned by root in jovyan's home
+if [ -d "/home/jovyan" ]; then
+    find /home/jovyan -type f -user root -exec chown jovyan:jovyan {} \; 2>/dev/null || true
+    find /home/jovyan -type f -name "*.ipynb" -exec chmod u+rw {} \; 2>/dev/null || true
+fi
+
+echo "Ownership fix complete"
+EOF
+chmod +x /usr/local/bin/fix-ownership.sh
+
+# Create wrapper entrypoint that runs ownership fix first
+RUN cat > /usr/local/bin/entrypoint-wrapper.sh << 'EOF'
+#!/bin/bash
+# Wrapper entrypoint: fix ownership then start jupyter
+
+# Run ownership fix as root
+/usr/local/bin/fix-ownership.sh
+
+# Execute original entrypoint (which handles user switching)
+exec /docker-entrypoint.sh "$@"
+EOF
+chmod +x /usr/local/bin/entrypoint-wrapper.sh
+
+# Install sudo for ownership fixes (if needed by fix-ownership.sh)
+RUN apt-get update && apt-get install -y --no-install-recommends sudo \
+    && rm -rf /var/lib/apt/lists/*
+
+# Set the wrapper as the entrypoint (runs as root, which is fine for fixes)
+ENTRYPOINT ["/usr/local/bin/entrypoint-wrapper.sh"]
+
+# Default command (will be passed to entrypoint)
+CMD ["start-notebook.sh"]
+
+# Switch back to jovyan for normal operations
+USER ${NB_UID}
