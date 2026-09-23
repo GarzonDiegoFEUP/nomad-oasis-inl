@@ -135,6 +135,7 @@ ARG PYTHON_VERSION=3.12
 COPY --chown=nomad:${UID} --from=builder /opt/venv /opt/venv
 COPY configs/nomad.yaml nomad.yaml
 COPY scripts/patch_nomad_north_start_tool.py /tmp/patch_nomad_north_start_tool.py
+COPY scripts/sitecustomize.py /opt/venv/lib/python${PYTHON_VERSION}/site-packages/sitecustomize.py
 COPY pyproject.toml uv.lock /opt/
 COPY --chown=nomad:${UID} --from=docs /app/built_docs /opt/venv/lib/python${PYTHON_VERSION}/site-packages/nomad/app/static/docs
 
@@ -206,6 +207,9 @@ RUN --mount=type=cache,target=/root/.cache/uv \
 
 
 FROM quay.io/jupyter/base-notebook:${JUPYTER_VERSION} AS jupyter
+
+ARG PYTHON_VERSION=3.12
+
 # Fix: https://github.com/hadolint/hadolint/wiki/DL4006
 # Fix: https://github.com/koalaman/shellcheck/wiki/SC3014
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
@@ -238,6 +242,7 @@ WORKDIR "${HOME}"
 COPY --from=uv_image /uv /bin/uv
 COPY --from=jupyter_builder /opt/conda /opt/conda
 COPY configs/nomad.yaml /opt/nomad/nomad.yaml
+COPY scripts/sitecustomize.py /opt/conda/lib/python${PYTHON_VERSION}/site-packages/sitecustomize.py
 
 
 # Get rid ot the following message when you open a terminal in jupyterlab:
