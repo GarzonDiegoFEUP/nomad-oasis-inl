@@ -216,44 +216,61 @@ jobs:
           '
 
           echo "Waiting for app and jupyter to be healthy (up to 10 min)..."
+          
+          wait_for_healthy() {
+            local container="$1"
+            local timeout_seconds="$2"
+
+            timeout "$timeout_seconds" bash -c "
+              until status=\$(docker inspect --format='{{.State.Status}}' '$container' 2>/dev/null) &&
+                    health=\$(docker inspect --format='{{if .State.Health}}{{.State.Health.Status}}{{else}}none{{end}}' '$container' 2>/dev/null) &&
+                    [ \"\$status\" = running ] &&
+                    [ \"\$health\" = healthy ]; do
+
+                if [ \"\$health\" = unhealthy ]; then
+                  echo '$container became unhealthy'
+                  exit 1
+                fi
+
+                if [ \"\$health\" = none ]; then
+                  echo '$container has no Docker health check'
+                  exit 1
+                fi
+
+                sleep 5
+              done
+            "
+          }
+
           HEALTHY=true
-          if ! timeout 620 bash -c '
-            until [ "$(docker inspect --format="{{.State.Health.Status}}" app 2>/dev/null)" = "healthy" ]; do
-              STATUS=$(docker inspect --format="{{.State.Health.Status}}" app 2>/dev/null)
-              if [ "$STATUS" = "unhealthy" ]; then exit 1; fi
-              sleep 5
-            done
-          '; then
+          if ! wait_for_healthy app 620; then
             HEALTHY=false
           fi
 
           if [ "$HEALTHY" = "true" ]; then
-            if ! timeout 320 bash -c '
-              until [ "$(docker inspect --format="{{.State.Health.Status}}" jupyter 2>/dev/null)" = "healthy" ]; do
-                STATUS=$(docker inspect --format="{{.State.Health.Status}}" jupyter 2>/dev/null)
-                if [ "$STATUS" = "unhealthy" ]; then exit 1; fi
-                sleep 5
-              done
-            '; then
+            if ! wait_for_healthy jupyter 320; then
               HEALTHY=false
             fi
           fi
 
           if [ "$HEALTHY" != "true" ]; then
             echo "Containers failed health check."
-            echo "=== App PID 1 threads and kernel wait channels ==="
-            docker exec app sh -c '
-              for tid in $(ls /proc/1/task/ 2>/dev/null); do
-                wchan=$(cat /proc/1/task/$tid/wchan 2>/dev/null || echo N/A)
-                echo "  TID $tid: $wchan"
-              done
-            ' || true
-            echo "=== App process list ==="
-            docker exec app ps auxf || true
-            echo "=== Logs for app ==="
-            docker logs app
-            echo "=== Logs for jupyter ==="
-            docker logs jupyter
+
+            for container in app jupyter; do
+              echo "=== $container status ==="
+              docker inspect \
+                --format='Status={{.State.Status}} Health={{if .State.Health}}{{.State.Health.Status}}{{else}}none{{end}} ExitCode={{.State.ExitCode}}' \
+                "$container" || true
+
+              echo "=== $container health log ==="
+              docker inspect \
+                --format='{{range .State.Health.Log}}{{printf "%s exit=%d output=%s\n" .Start .ExitCode .Output}}{{end}}' \
+                "$container" || true
+
+              echo "=== Logs for $container ==="
+              docker logs "$container" || true
+            done
+
             exit 1
           fi
 
