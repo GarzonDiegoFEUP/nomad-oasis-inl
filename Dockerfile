@@ -150,7 +150,10 @@ RUN mkdir -p /app/.volumes/fs \
 # Replace the default jupyterhub config with our patched version.
 # The patch adds NOMAD_NORTH_INTERNAL_CLIENT_URL support so spawned containers
 # can reach the API via the internal Docker service name.
+# Copy to both locations: app root (for reference) and venv (where JupyterHub actually reads it)
 COPY --chown=nomad:${UID} nomad/jupyterhub_config.py nomad/jupyterhub_config.py
+RUN cp /app/nomad/jupyterhub_config.py /opt/venv/lib/python${PYTHON_VERSION}/site-packages/nomad/jupyterhub_config.py \
+ && chown nomad:${UID} /opt/venv/lib/python${PYTHON_VERSION}/site-packages/nomad/jupyterhub_config.py
 # The application ports
 EXPOSE 8000
 EXPOSE 9000
