@@ -231,3 +231,6 @@ if config.north.hub_connect_url:
 # Fixing: Unexpected error: "Gateway Time-out (504)". Please try again and let us know, if this error keeps happening.
 c.DockerSpawner.http_timeout = 5 * 60  # in seconds
 c.DockerSpawner.start_timeout = 10 * 60  # in seconds
+
+# Register the pre_spawn hook to configure volumes and environment for spawned containers
+c.DockerSpawner.pre_spawn_hook = pre_spawn
