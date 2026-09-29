@@ -36,6 +36,8 @@ oasis:
     - "eduardo.lopez@inl.int"
     - "eduardo" # email=None on central account
     - "ines.cardoso@inl.int"
+    - "beatriz.araujo@inl.int"
+    - "chadrasekhar.loka@inl.int"
 
 plugins:
   entry_points:
